@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from 'react-router'
 import Cart from './components/pages/Cart.jsx'
 import Home from './components/pages/Home.jsx'
 import MainLayout from './components/common/MainLayout.jsx'
+import 'flowbite'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

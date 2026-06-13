@@ -84,12 +84,15 @@ const Header = () => {
         <li>
           <Link
             to={'/cart'}
-            className="block py-2 px-3 text-heading rounded hover:bg-neutral-tertiary md:hover:bg-transparent md:border-0 md:hover:text-fg-brand md:p-0 md:dark:hover:bg-transparent"
+            className="block py-2 px-3 text-heading rounded hover:bg-neutral-tertiary md:hover:bg-transparent md:border-0 md:hover:text-fg-brand md:p-0 md:dark:hover:bg-transparent relative"
           >
-            Cart({myData})
+            Cart
+            <div className='absolute -top-3 -right-3 p-1 bg-red-500 text-white rounded-full text-xs'>
+            ({myData})
+
+            </div>
           </Link>
         </li>
-        <button>Count</button>
       </ul>
     </div>
   </div>

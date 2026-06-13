@@ -1,16 +1,71 @@
-# React + Vite
+# Redux Toolkit Practice Project
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project demonstrates the complete Redux Toolkit workflow in a React application.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+* Redux Toolkit store configuration
+* Creating slices using `createSlice`
+* Defining actions and reducers
+* Dispatching actions with `useDispatch`
+* Accessing state with `useSelector`
+* Global state management using React Redux
+* Counter functionality (Increment/Decrement)
+* Scalable folder structure for future features
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+* React
+* Redux Toolkit
+* React Redux
+* Vite
+* JavaScript
 
-## Expanding the ESLint configuration
+## Project Structure
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```text
+src/
+├── redux/
+│   ├── store.js
+│   └── counter/
+│       └── counterSlice.js
+├── components/
+│   └── pages/
+│       └── Home.jsx
+└── main.jsx
+```
+
+## Learning Outcomes
+
+Through this project, I learned:
+
+* How Redux Toolkit simplifies Redux setup
+* Difference between actions, reducers, and slices
+* Store configuration and Provider setup
+* Using `useDispatch` and `useSelector`
+* Managing global state efficiently in React applications
+
+## Getting Started
+
+```bash
+npm install
+npm run dev
+```
+
+The application will start on:
+
+```bash
+http://localhost:5173
+```
+
+## Future Improvements
+
+* Shopping Cart functionality
+* Product management
+* Async API integration using `createAsyncThunk`
+* Persistent state with localStorage
+* Redux DevTools integration
+
+---
+
+Created while learning and practicing Redux Toolkit with React.
