@@ -4,9 +4,10 @@ import { Link } from 'react-router'
 
 const Header = () => {
     let myData = useSelector((myStore) => myStore.counterStore.count)
+    let cartItemCount = useSelector((myStore)=>myStore.cartStore.cart.length)
   return (
     <div>
-        <nav className="bg-neutral-primary w-full z-20 top-0 start-0 border-b border-default">
+        <nav className="fixed bg-white bg-neutral-primary w-full z-20 top-0 start-0 border-b border-default">
   <div className="max-w-7xl flex flex-wrap items-center justify-between mx-auto p-4">
     <Link
       to={'/'}
@@ -88,7 +89,7 @@ const Header = () => {
           >
             Cart
             <div className='absolute -top-3 -right-3 p-1 bg-red-500 text-white rounded-full text-xs'>
-            ({myData})
+            ({cartItemCount})
 
             </div>
           </Link>

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { increment, decrement } from "../../redux/counterSlice";
 
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -9,6 +9,12 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import axios from "axios";
+import { addToCart, deleteCart } from "../../redux/cartSlice";
+import dispatch from "../../redux/store";
+import { ToastContainer, toast } from "react-toastify";
+
+import Swal from "sweetalert2/dist/sweetalert2.js";
+import "sweetalert2/src/sweetalert2.scss";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -16,15 +22,14 @@ const Home = () => {
 
   const getProducts = () => {
     axios.get(`https://dummyjson.com/products`).then((res) => {
-      res.data
+      res.data;
       console.log(res.data);
       setProduct(res.data.products);
-    }
-  )};
+    });
+  };
   useEffect(() => {
     getProducts();
   }, []);
-
 
   return (
     <div>
@@ -86,27 +91,73 @@ const Home = () => {
       <section className="py-5">
         <h1>Our Products</h1>
         <div className="max-w-[1320px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-6 mt-5">
-          {
-            product.map((product, index) => {
-              return (<ProductCard key={index} product={product} />);
-            })
-          }
+          {product.map((product, index) => {
+            return <ProductCard key={index} product={product} />;
+          })}
         </div>
       </section>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 };
 
 export default Home;
 
+const ProductCard = ({ product }) => {
+  let dispatch = useDispatch();
+  let { id, title, price, thumbnail } = product;
+  let cart = useSelector((myStore) => myStore.cartStore.cart);
 
-const ProductCard = ({product}) => {
-  let {title, price, thumbnail}= product
+  console.log(cart);
+  let checkCartItem = cart.find((item) => item.cartObj.id === id);
 
   let addToCartItem = () => {
+    let cartObj = {
+      id,
+      title,
+      price,
+      thumbnail,
+      qty: 1,
+    };
     // dispatch(addToCart())
-    alert("Item added to cart")
-  }
+    // alert("Item added to cart")
+    dispatch(addToCart({ cartObj }));
+    console.log(cartObj);
+    toast.success("Item added to cart");
+  };
+  let removeCartItem = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You want to remove this item from cart!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Remove it!",
+    }).then((result) => {
+      if (result.isConfirmed)
+        dispatch(deleteCart({ id }));
+        Swal.fire({
+      title: "Removed!",
+      text: "Your item has been removed.",
+      icon: "success",
+    });
+  });
+  
+  // prompt("Are you sure you want to remove this item from cart?");
+  // toast.error("Item removed from cart");
+  };
   return (
     <div>
       {" "}
@@ -332,30 +383,57 @@ const ProductCard = ({product}) => {
             <p className="text-2xl font-extrabold leading-tight text-gray-900 dark:text-white">
               ${price}
             </p>
-            <button
-              type="button"
-              className="inline-flex items-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4  focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 bg-blue-400"
-              onClick={addToCartItem}
-            >
-              <svg
-                className="-ms-2 me-2 h-5 w-5"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                width={24}
-                height={24}
-                fill="none"
-                viewBox="0 0 24 24"
+            {checkCartItem ? 
+              <button
+                type="button"
+                className="inline-flex items-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4  focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 bg-red-400"
+                onClick={removeCartItem}
               >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 4h1.5L8 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm.75-3H7.5M11 7H6.312M17 4v6m-3-3h6"
-                />
-              </svg>
-              Add to cart
-            </button>
+                <svg
+                  className="-ms-2 me-2 h-5 w-5"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width={24}
+                  height={24}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 4h1.5L8 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm.75-3H7.5M11 7H6.312M17 4v6m-3-3h6"
+                  />
+                </svg>
+                Remove Cart
+              </button>
+           :
+              <button
+                type="button"
+                className="inline-flex items-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4  focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 bg-blue-400"
+                onClick={addToCartItem}
+              >
+                <svg
+                  className="-ms-2 me-2 h-5 w-5"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width={24}
+                  height={24}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 4h1.5L8 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm.75-3H7.5M11 7H6.312M17 4v6m-3-3h6"
+                  />
+                </svg>
+                Add to cart
+              </button>
+            }
           </div>
         </div>
       </div>
